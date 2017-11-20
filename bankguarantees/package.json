@@ -1,0 +1,15 @@
+{
+  "name": "bankguarantees",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "javascript-state-machine": "^3.0.1",
+    "seneca": "^3.4.3"
+  }
+}
