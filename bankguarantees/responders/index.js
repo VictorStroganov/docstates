@@ -7,6 +7,8 @@ const BankGuaranteesService = require('../services/bankguarantees');
 
 let listener = initListener(config.microservices.bankguarantees);
 
+listener.add('create', BankGuaranteesService.create);
+
 listener.add('getState', BankGuaranteesService.getState);
 
 listener.add('prepare', BankGuaranteesService.prepare);

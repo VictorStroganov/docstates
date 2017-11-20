@@ -7,6 +7,10 @@ const {initClient} = require('../utils');
 const guarantees = initClient(config.microservices.bankguarantees);
 
 module.exports = {
+	create: async data => {
+		console.log(`Gateway - BankGuarantees service - create request with params ${JSON.stringify(data)}`);
+		return await guarantees.call('create', data);
+	},
 	getState: async data => {
 		console.log(`Gateway - BankGuarantees service - getState request with params ${JSON.stringify(data)}`);
 		return await guarantees.call('getState', data);
