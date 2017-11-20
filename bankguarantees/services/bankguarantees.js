@@ -48,11 +48,43 @@ let dbg = new StateMachine({
 });
 
 module.exports = {
-	getStatesList: async req => {
-		return {states: [1, 2, 3]};
+	getState: async req => {
+		return {state: dbg.state};
 	},
 	prepare: async req => {
 		dbg.prepare();
+		return {state: dbg.state};
+	},
+	approveByBeneficiary: async req => {
+		dbg.approveByBeneficiary();
+		return {state: dbg.state};
+	},
+	disagreeByBeneficiary: async req => {
+		dbg.disagreeByBeneficiary();
+		return {state: dbg.state};
+	},
+	cancelApproved: async req => {
+		dbg.cancelApproved();
+		return {state: dbg.state};
+	},
+	pay: async req => {
+		dbg.cancelApproved();
+		return {state: dbg.state};
+	},
+	activate: async req => {
+		dbg.activate();
+		return {state: dbg.state};
+	},
+	cancelPaid: async req => {
+		dbg.cancelPaid();
+		return {state: dbg.state};
+	},
+	retry: async req => {
+		dbg.retry();
+		return {state: dbg.state};
+	},
+	cancelDisagreed: async req => {
+		dbg.cancelDisagreed();
 		return {state: dbg.state};
 	}
 };
