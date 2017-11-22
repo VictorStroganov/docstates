@@ -2,10 +2,13 @@
 
 const config = require('../config');
 
-const {initListener} = require('../utils');
+//const {initListener} = require('../utils');
+const {initClient, initLoggerClient, initLoggedClient, initLoggedListener} = require('./../utils');
 const BankGuaranteesService = require('../services/bankguarantees');
 
-let listener = initListener(config.microservices.bankguarantees);
+const logger = initLoggerClient(config.microservices.logger, config.microservices.bankguarantees.name);
+
+let listener = initLoggedListener(config.microservices.bankguarantees, logger);
 
 listener.add('create', BankGuaranteesService.create);
 

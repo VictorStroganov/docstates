@@ -9,7 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "boom": "^7.1.1",
     "express": "^4.16.2",
-    "seneca": "^3.4.3"
+    "jsonschema": "^1.2.0",
+    "seneca": "^3.4.3",
+    "uuid": "^3.1.0"
   }
 }
