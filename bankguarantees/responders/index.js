@@ -2,7 +2,6 @@
 
 const config = require('../config');
 
-//const {initListener} = require('../utils');
 const {initClient, initLoggerClient, initLoggedClient, initLoggedListener} = require('./../utils');
 const BankGuaranteesService = require('../services/bankguarantees');
 

@@ -2,14 +2,11 @@
 
 const config = require('../config');
 
-//const {initClient} = require('../utils');
-
 const {initClient, initLoggerClient, initLoggedClient, initSecuredClient} = require('./../utils');
 
 const logger = initLoggerClient(config.microservices.logger, 'gateway');
 
 const guarantees = initLoggedClient(config.microservices.bankguarantees, logger);
-//initClient(config.microservices.bankguarantees);
 
 module.exports = {
 	create: async data => {

@@ -1,5 +1,7 @@
 'use strict';
 
+const uuid = require('uuid/v4');
+const boom = require('boom');
 const config = require('../config');
 const StateMachine = require('javascript-state-machine');
 const BankGuaranteeModel = require('./../models/bankguarantee');
@@ -44,6 +46,12 @@ StateMachine.factory(BankGuaranteeModel, {
 		},
 		onRetry: () => {
 			console.log('DBG requested again');
+		},
+		onInvalidTransition: function(transition, from, to) {
+			throw boom.badRequest(`Transition "${transition}" not allowed from the state "${from}"`);
+		},
+		onPendingTransition: function(transition, from, to) {
+			throw boom.badRequest(`Transition "${transition}" already in progress`);
 		}
 	}
 });
@@ -52,7 +60,7 @@ var guarantees = new Map();
 
 module.exports = {
 	create: async req => {
-		const newGuaranteeId = Math.floor(Math.random()* 1000000).toString();
+		const newGuaranteeId = uuid();//Math.floor(Math.random()* 1000000).toString();
 		const newGuaranteeType = 'normal';
 
 		const newItem = new BankGuaranteeModel(newGuaranteeId, newGuaranteeType);
@@ -62,51 +70,81 @@ module.exports = {
 		return {id: newItem.id, type: newItem.type, state: newItem.state};	
 	},
 	getState: async req => {
-		const dbg = guarantees.get(req.data.id);
+		let dbg = guarantees.get(req.data.id);
+		if(!dbg) {
+			throw boom.notFound('Document not found');
+		}
 		return {id: dbg.id, state: dbg.state};
 	},
 	prepare: async req => {
-		const dbg = guarantees.get(req.data.id);
+		let dbg = guarantees.get(req.data.id);
+		if(!dbg) {
+			throw boom.notFound('Document not found');
+		}
 		dbg.prepare();
 		return {state: dbg.state};
 	},
 	approveByBeneficiary: async req => {
-		const dbg = guarantees.get(req.data.id);
+		let dbg = guarantees.get(req.data.id);
+		if(!dbg) {
+			throw boom.notFound('Document not found');
+		}
 		dbg.approveByBeneficiary();
 		return {state: dbg.state};
 	},
 	disagreeByBeneficiary: async req => {
-		const dbg = guarantees.get(req.data.id);
+		let dbg = guarantees.get(req.data.id);
+		if(!dbg) {
+			throw boom.notFound('Document not found');
+		}
 		dbg.disagreeByBeneficiary();
 		return {state: dbg.state};
 	},
 	cancelApproved: async req => {
-		const dbg = guarantees.get(req.data.id);
+		let dbg = guarantees.get(req.data.id);
+		if(!dbg) {
+			throw boom.notFound('Document not found');
+		}
 		dbg.cancelApproved();
 		return {state: dbg.state};
 	},
 	pay: async req => {
-		const dbg = guarantees.get(req.data.id);
+		let dbg = guarantees.get(req.data.id);
+		if(!dbg) {
+			throw boom.notFound('Document not found');
+		}
 		dbg.cancelApproved();
 		return {state: dbg.state};
 	},
 	activate: async req => {
-		const dbg = guarantees.get(req.data.id);
+		let dbg = guarantees.get(req.data.id);
+		if(!dbg) {
+			throw boom.notFound('Document not found');
+		}
 		dbg.activate();
 		return {state: dbg.state};
 	},
 	cancelPaid: async req => {
-		const dbg = guarantees.get(req.data.id);
+		let dbg = guarantees.get(req.data.id);
+		if(!dbg) {
+			throw boom.notFound('Document not found');
+		}
 		dbg.cancelPaid();
 		return {state: dbg.state};
 	},
 	retry: async req => {
-		const dbg = guarantees.get(req.data.id);
+		let dbg = guarantees.get(req.data.id);
+		if(!dbg) {
+			throw boom.notFound('Document not found');
+		}
 		dbg.retry();
 		return {state: dbg.state};
 	},
 	cancelDisagreed: async req => {
-		const dbg = guarantees.get(req.data.id);
+		let dbg = guarantees.get(req.data.id);
+		if(!dbg) {
+			throw boom.notFound('Document not found');
+		}
 		dbg.cancelDisagreed();
 		return {state: dbg.state};
 	}
