@@ -58,9 +58,17 @@ StateMachine.factory(BankGuaranteeModel, {
 
 var guarantees = new Map();
 
+const getDocumentById = (id) => {
+	let dbg = guarantees.get(id);
+	if(!dbg) {
+		throw boom.notFound('Document not found');
+	}
+	return dbg;
+}
+
 module.exports = {
 	create: async req => {
-		const newGuaranteeId = uuid();//Math.floor(Math.random()* 1000000).toString();
+		const newGuaranteeId = uuid();
 		const newGuaranteeType = 'normal';
 
 		const newItem = new BankGuaranteeModel(newGuaranteeId, newGuaranteeType);
@@ -70,81 +78,51 @@ module.exports = {
 		return {id: newItem.id, type: newItem.type, state: newItem.state};	
 	},
 	getState: async req => {
-		let dbg = guarantees.get(req.data.id);
-		if(!dbg) {
-			throw boom.notFound('Document not found');
-		}
+		let dbg = getDocumentById(req.data.id);
 		return {id: dbg.id, state: dbg.state};
 	},
 	prepare: async req => {
-		let dbg = guarantees.get(req.data.id);
-		if(!dbg) {
-			throw boom.notFound('Document not found');
-		}
+		let dbg = getDocumentById(req.data.id);
 		dbg.prepare();
 		return {state: dbg.state};
 	},
 	approveByBeneficiary: async req => {
-		let dbg = guarantees.get(req.data.id);
-		if(!dbg) {
-			throw boom.notFound('Document not found');
-		}
+		let dbg = getDocumentById(req.data.id);
 		dbg.approveByBeneficiary();
 		return {state: dbg.state};
 	},
 	disagreeByBeneficiary: async req => {
-		let dbg = guarantees.get(req.data.id);
-		if(!dbg) {
-			throw boom.notFound('Document not found');
-		}
+		let dbg = getDocumentById(req.data.id);
 		dbg.disagreeByBeneficiary();
 		return {state: dbg.state};
 	},
 	cancelApproved: async req => {
-		let dbg = guarantees.get(req.data.id);
-		if(!dbg) {
-			throw boom.notFound('Document not found');
-		}
+		let dbg = getDocumentById(req.data.id);
 		dbg.cancelApproved();
 		return {state: dbg.state};
 	},
 	pay: async req => {
-		let dbg = guarantees.get(req.data.id);
-		if(!dbg) {
-			throw boom.notFound('Document not found');
-		}
+		let dbg = getDocumentById(req.data.id);
 		dbg.cancelApproved();
 		return {state: dbg.state};
 	},
 	activate: async req => {
-		let dbg = guarantees.get(req.data.id);
-		if(!dbg) {
-			throw boom.notFound('Document not found');
-		}
+		let dbg = getDocumentById(req.data.id);
 		dbg.activate();
 		return {state: dbg.state};
 	},
 	cancelPaid: async req => {
-		let dbg = guarantees.get(req.data.id);
-		if(!dbg) {
-			throw boom.notFound('Document not found');
-		}
+		let dbg = getDocumentById(req.data.id);
 		dbg.cancelPaid();
 		return {state: dbg.state};
 	},
 	retry: async req => {
-		let dbg = guarantees.get(req.data.id);
-		if(!dbg) {
-			throw boom.notFound('Document not found');
-		}
+		let dbg = getDocumentById(req.data.id);
 		dbg.retry();
 		return {state: dbg.state};
 	},
 	cancelDisagreed: async req => {
-		let dbg = guarantees.get(req.data.id);
-		if(!dbg) {
-			throw boom.notFound('Document not found');
-		}
+		let dbg = getDocumentById(req.data.id);
 		dbg.cancelDisagreed();
 		return {state: dbg.state};
 	}
